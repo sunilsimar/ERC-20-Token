@@ -4,5 +4,32 @@ pragma solidity ^0.8.0;
 //ERC-20
 contract TokenContract {
     string public name = "SunilToken";
-    string public symbol = "";
+    string public symbol = "SUNIL";
+    uint8 public decimals = 18;
+    uint256 public totalSupply = 1000000 * (10 ** uint256(decimals));
+
+    mapping(address => uint256) public balanceOf;
+    mapping(address => mapping(address => uint256)) public allowance;
+
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(
+        address indexed owner,
+        address indexed spender,
+        uint256 value
+    );
+
+    constructor() {
+        balanceOf[msg.sender] = totalSupply;
+    }
+
+    function transfer(
+        address _to,
+        uint256 _value
+    ) public returns (bool success) {
+        require(balanceOf[msg.sender] >= _value, "Not enough balance");
+        balanceOf[msg.sender] -= _value;
+        balanceOf[_to] += _value;
+        emit Transfer(msg.sender, _to, _value);
+        return true;
+    }
 }
